@@ -1,7 +1,6 @@
 # Wallet Wrapped
 
 
-
 ## Overview
 **Wallet Wrapped** is a Web3 analytics tool that scans a user’s on-chain activity and generates a yearly **Wrapped-style recap** that is similar to Spotify Wrapped, but for your crypto wallet.
 
@@ -26,7 +25,6 @@ Users can also mint your Wrapped recap image as an NFT (for a small $1 fee), per
 - Mint your Wrapped recap as an NFT ($1 minting fee)
 - API + SDK support
 - Designed to deployed on Vercel
-
 
 
 ## Tech Stack
@@ -83,9 +81,13 @@ Users can also mint your Wrapped recap image as an NFT (for a small $1 fee), per
 ## Installation
 
 ### 1. Clone the repository
-```git clone https://github.com/shittuisrael004/wrapped_idea```
+```shell
+ $ git clone https://github.com/shittuisrael004/wrapped_idea
+```
 ### 2. Enter the project folder
-```cd wrapped_idea```
+```shell
+$ cd wrapped_idea
+```
 
 
 
