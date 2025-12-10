@@ -82,11 +82,11 @@ Users can also mint your Wrapped recap image as an NFT (for a small $1 fee), per
 
 ### 1. Clone the repository
 ```shell
- $ git clone https://github.com/shittuisrael004/wrapped_idea
+ git clone https://github.com/shittuisrael004/wrapped_idea
 ```
 ### 2. Enter the project folder
 ```shell
-$ cd wrapped_idea
+cd wrapped_idea
 ```
 
 
