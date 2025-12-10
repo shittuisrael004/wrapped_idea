@@ -7,6 +7,8 @@
 
 It currently supports **EVM chains such as Base and Celo**, fetching all relevant on-chain activity, computing insights, and generating **beautiful, shareable visual summaries**.
 
+Users can also mint your Wrapped recap image as an NFT (for a small $1 fee), permanently storing their annual crypto activities on-chain.
+
 
 ## Features
 
@@ -21,6 +23,7 @@ It currently supports **EVM chains such as Base and Celo**, fetching all relevan
   - NFTs minted or traded
   - total volume
 - Generates Wrapped-style visual summaries
+- Mint your Wrapped recap as an NFT ($1 minting fee)
 - API + SDK support
 - Designed to deployed on Vercel
 
@@ -39,6 +42,9 @@ It currently supports **EVM chains such as Base and Celo**, fetching all relevan
 - Node.js + TypeScript
 - Fastify or Next.js API routes
 - Satori + Resvg (image rendering)
+
+### Smart Contract
+- Solidity (ERC721 NFT contract)
 
 ### Data Layer
 - Blockscout API (Celo + Base)
@@ -61,9 +67,16 @@ It currently supports **EVM chains such as Base and Celo**, fetching all relevan
 - outputs JSON
 - or renders images
 
-### 4. Frontend UI
-- React/Next.js results page
+### 4. Minting Engine
+- Sends the generated image + metadata to the minting contract
+- Stores media on IPFS or Arweave
+- Mints an ERC-721 NFT on Celo or Base
+- User pays a $1 mint fee (set in the contract)
 
+### 5. Frontend UI
+- React/Next.js results page
+- One-click mint integration
+- Shareable recap view
 
 
 
@@ -77,9 +90,11 @@ It currently supports **EVM chains such as Base and Celo**, fetching all relevan
 
 
 ## Support
-#### PRs welcome
-#### DM on X (Twitter): @ShittuIsraelOl2 or @Jadonamite
+#### PRs welcome 🤝
+#### DM on X (Twitter): 
+- @ShittuIsraelOl2
+- @Jadonamite
 
-Happy Building
+Happy Building!
 
 ❤️ & 💡 
