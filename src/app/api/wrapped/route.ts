@@ -21,7 +21,9 @@ export async function GET(request: Request) {
   try {
     const promises = chains.map(async (chain) => {
       // FIX: Corrected URL from 'transaction_v2/summary' to 'transactions_summary'
-      const url = `https://api.covalenthq.com/v1/${chain.name}/address/${address}/transactions_summary/?key=${apiKey}`;
+      // const url = `https://api.covalenthq.com/v1/${chain.name}/address/${address}/transactions_summary/?key=${apiKey}`;
+      // Added &quote-currency=USD to force price calculation
+const url = `https://api.covalenthq.com/v1/${chain.name}/address/${address}/transactions_summary/?key=${apiKey}&quote-currency=USD`;
       
       try {
         const res = await fetch(url);
