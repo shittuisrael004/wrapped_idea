@@ -4,9 +4,8 @@ export interface WrappedSummary {
   summary: {
     total_tx: number;
     active_days: number;
-    total_gas_usd: string; // It comes as a string "0.00"
-    first_tx_date: string;
-    last_tx_date: string;
+    total_gas_usd: string;
+    peak_month: string; // NEW FIELD
   };
   favorites: {
     top_chain: string;
