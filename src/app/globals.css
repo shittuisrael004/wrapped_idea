@@ -6,8 +6,8 @@
   --color-brand-dark: #8BCBC9;
 
   /* FONTS */
-  --font-logo: var(--font-alfa-slab), cursive;
-  --font-body: var(--font-dm-sans), sans-serif;
+    --font-family-logo: var(--font-alfa-slab), cursive;
+    --font-family-body: var(--font-dm-sans), sans-serif;
 
   /* SHADOWS */
   --shadow-hard: 0px 4px 0px 0px #0F172A;
@@ -26,12 +26,17 @@ body {
   background-color: var(--color-brand);
   background-image: var(--image-swirl);
   background-attachment: fixed;
-  font-family: var(--font-body);
+
+    font-family: var(--font-family-body);
+
   color: #0F172A;
 }
 
-@utility font-logo {
-  font-family: var(--font-logo);
+.font-logo {
+  font-family: var(--font-alfa-slab), cursive !important;
+}
+.font-body {
+  font-family: var(--font-family-body);
 }
 
 @utility text-stroke-sm {
