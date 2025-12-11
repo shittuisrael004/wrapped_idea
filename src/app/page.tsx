@@ -16,7 +16,6 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState<WrappedSummary | null>(null);
 
-  // Determine current step for the stepper
   const currentStep = !isConnected ? 1 : !data ? 2 : 3;
 
   const fetchWrapped = async () => {
@@ -31,72 +30,77 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen w-full flex flex-col items-center pt-32 pb-12 px-4 relative">
+    // Main Container: Flex column, full height
+    <main className="min-h-screen w-full flex flex-col relative overflow-hidden">
       
-      {/* 1. FIXED HEADER LOGO */}
-      <div className="fixed top-0 left-0 w-full flex justify-center z-50 pt-6 pb-4 bg-gradient-to-b from-[#B1E4E3] to-transparent pointer-events-none">
-        <h1 className="font-logo text-3xl md:text-5xl text-white uppercase tracking-wider drop-shadow-[3px_3px_0px_rgba(0,0,0,1)] text-stroke-2 pointer-events-auto">
+      {/* 1. FIXED HEADER (Smaller Logo) */}
+      <div className="fixed top-0 left-0 w-full flex justify-center z-50 pt-4 pb-2 bg-gradient-to-b from-[#B1E4E3] to-transparent pointer-events-none">
+        <h1 className="font-logo text-2xl md:text-3xl text-white uppercase tracking-wider drop-shadow-md text-stroke-sm pointer-events-auto">
           <span className="text-white">WRAPPED</span>
-          <span className="text-[#B1E4E3] ml-2" style={{ textShadow: "3px 3px 0 #000" }}>ONCHAIN</span>
+          <span className="text-[#B1E4E3] ml-2" style={{ textShadow: "1.5px 1.5px 0 #000" }}>ONCHAIN</span>
         </h1>
       </div>
 
-      {/* 2. STEPPER */}
-      <div className="z-10">
-         <Stepper step={currentStep} />
+      {/* CONTENT AREA: Center the Card Vertically & Horizontally */}
+      <div className="flex-grow flex flex-col items-center justify-center w-full px-4 pt-20 pb-10">
+        
+        {/* STEPPER */}
+        <div className="mb-6 z-10 scale-90 md:scale-100">
+           <Stepper step={currentStep} />
+        </div>
+
+        {/* 3. THE CARD (Taller, Soft Shadow, Centered) */}
+        <div className="z-10 w-full max-w-lg bg-white rounded-[3rem] shadow-[var(--shadow-soft)] p-8 md:p-12 relative flex flex-col justify-center min-h-[550px] transition-all duration-500">
+          
+          {!data ? (
+            /* START SCREEN */
+            <div className="flex flex-col items-center text-center space-y-10 h-full justify-center">
+              <div className="space-y-4">
+                <h2 className="text-4xl md:text-5xl font-logo text-slate-900 leading-tight">
+                  CHECK YOUR<br/>2025
+                </h2>
+                <p className="text-slate-500 font-medium text-lg px-4">
+                  Connect your wallet to generate your yearly on-chain recap.
+                </p>
+              </div>
+               
+               {isConnected ? (
+                 <div className="w-full max-w-xs space-y-4">
+                   <Button3D onClick={fetchWrapped} disabled={loading} variant="brand">
+                     {loading ? "SCANNING..." : "GENERATE WRAPPED 🚀"}
+                   </Button3D>
+                   <button onClick={() => disconnect()} className="text-xs font-bold text-slate-400 hover:text-black uppercase tracking-widest mt-4">
+                     Disconnect Wallet
+                   </button>
+                 </div>
+               ) : (
+                 <div className="w-full max-w-xs">
+                   <Button3D onClick={() => connect({ connector: injected() })} variant="black">
+                     CONNECT WALLET
+                   </Button3D>
+                 </div>
+               )}
+            </div>
+          ) : (
+            /* RESULTS SCREEN */
+            <div className="h-full flex flex-col justify-between">
+              <SlideIntro data={data} />
+              <div className="mt-8 flex justify-center">
+                <button 
+                  onClick={() => setData(null)} 
+                  className="text-xs font-bold text-slate-300 hover:text-slate-500 uppercase tracking-widest transition-colors"
+                >
+                   Start Over
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      
       </div>
 
-      {/* 3. THE BIGGER CARD */}
-      {/* Increased max-width to 'max-w-2xl' and padding */}
-      <div className="z-10 w-full max-w-2xl bg-white border-[3px] border-black rounded-[2.5rem] shadow-hard p-8 md:p-14 relative transition-all duration-300">
-        
-        {!data ? (
-          /* START SCREEN */
-          <div className="flex flex-col items-center text-center space-y-8">
-            <div className="space-y-2">
-              <h2 className="text-3xl md:text-4xl font-black font-logo tracking-wide text-slate-900">
-                CHECK YOUR 2025
-              </h2>
-              <p className="text-slate-500 font-medium text-lg">
-                Connect your wallet to generate your yearly recap.
-              </p>
-            </div>
-             
-             {isConnected ? (
-               <div className="w-full max-w-xs space-y-4">
-                 <Button3D onClick={fetchWrapped} disabled={loading} variant="brand" className="py-5 text-xl">
-                   {loading ? "SCANNING..." : "GENERATE WRAPPED 🚀"}
-                 </Button3D>
-                 <button onClick={() => disconnect()} className="text-sm font-bold text-slate-400 underline decoration-2 underline-offset-4 hover:text-black">
-                   Disconnect {address?.slice(0,6)}...
-                 </button>
-               </div>
-             ) : (
-               <div className="w-full max-w-xs">
-                 <Button3D onClick={() => connect({ connector: injected() })} variant="black" className="py-5 text-xl">
-                   CONNECT WALLET
-                 </Button3D>
-               </div>
-             )}
-          </div>
-        ) : (
-          /* RESULTS SCREEN */
-          <div>
-            <SlideIntro data={data} />
-            <div className="mt-8 flex justify-center">
-              <button 
-                onClick={() => setData(null)} 
-                className="text-xs font-bold text-slate-400 hover:text-black uppercase tracking-widest border-b-2 border-transparent hover:border-black transition-all"
-              >
-                 Start Over
-              </button>
-            </div>
-          </div>
-        )}
-      </div>
-      
       {/* Footer */}
-      <div className="mt-12 opacity-40 font-logo text-xs tracking-widest">
+      <div className="absolute bottom-4 w-full text-center opacity-30 font-logo text-[10px] tracking-[0.2em]">
         POWERED BY COVALENT
       </div>
     </main>
