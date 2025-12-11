@@ -1,21 +1,20 @@
 @import "tailwindcss";
 
 @theme {
-  /* BRAND COLORS */
+  /* COLORS */
   --color-brand: #B1E4E3;
   --color-brand-dark: #8BCBC9;
 
   /* FONTS */
+  /* This maps to the variable set in layout.tsx */
   --font-logo: var(--font-retro), cursive;
-  /* Mapped to Alfa Slab One */
   --font-body: var(--font-sans), sans-serif;
-  /* Mapped to DM Sans */
 
   /* SHADOWS */
   --shadow-hard: 0px 4px 0px 0px #0F172A;
   --shadow-deep: 0px 30px 60px -12px rgba(0, 0, 0, 0.25), 0px 0px 0px 1px rgba(0, 0, 0, 0.05);
 
-  /* BACKGROUND PATTERN */
+  /* BACKGROUND */
   --image-swirl: repeating-radial-gradient(circle at 50% 100%,
       rgba(224, 247, 250, 0.2) 0%,
       rgba(224, 247, 250, 0.2) 10%,
@@ -23,18 +22,15 @@
       rgba(178, 235, 242, 0.2) 20%);
 }
 
-/* GLOBAL STYLES */
 body {
   background-color: var(--color-brand);
   background-image: var(--image-swirl);
   background-attachment: fixed;
-
-  /* STRICTLY FORCE DM SANS FOR EVERYTHING DEFAULT */
   font-family: var(--font-body);
   color: #0F172A;
 }
 
-/* Utility for the Logo Font Only */
+/* Explicit Utility for the Retro Font */
 @utility font-logo {
   font-family: var(--font-logo);
 }

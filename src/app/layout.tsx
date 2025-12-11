@@ -5,14 +5,14 @@ import { Providers } from "./providers";
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
-  variable: "--font-sans", // Standardize to 'sans'
+  variable: "--font-sans",
   display: "swap",
 });
 
 const alfaSlab = Alfa_Slab_One({
   weight: "400",
   subsets: ["latin"],
-  variable: "--font-retro", // Standardize to 'retro'
+  variable: "--font-retro",
   display: "swap",
 });
 
@@ -32,7 +32,6 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
-      {/* Apply both variables here. 'font-sans' sets the default. */}
       <body className={`${dmSans.variable} ${alfaSlab.variable} font-sans antialiased min-h-screen`}>
         <Providers>{children}</Providers>
       </body>
