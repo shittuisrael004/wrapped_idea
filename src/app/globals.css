@@ -1,27 +1,26 @@
 @import "tailwindcss";
 
 @theme {
-  /* COLORS */
+  /* BRAND COLORS */
   --color-brand: #B1E4E3;
   --color-brand-dark: #8BCBC9;
 
   /* FONTS */
-  /* --font-retro automatically creates the 'font-retro' class */
-  --font-retro: var(--font-retro), cursive;
-
-  /* --font-sans overrides the default 'font-sans' class */
-  --font-sans: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-logo: var(--font-retro), cursive;
+  /* Mapped to Alfa Slab One */
+  --font-body: var(--font-sans), sans-serif;
+  /* Mapped to DM Sans */
 
   /* SHADOWS */
   --shadow-hard: 0px 4px 0px 0px #0F172A;
   --shadow-deep: 0px 30px 60px -12px rgba(0, 0, 0, 0.25), 0px 0px 0px 1px rgba(0, 0, 0, 0.05);
 
-  /* BACKGROUND PATTERN (15% Opacity) */
+  /* BACKGROUND PATTERN */
   --image-swirl: repeating-radial-gradient(circle at 50% 100%,
-      rgba(224, 247, 250, 0.3) 0%,
-      rgba(224, 247, 250, 0.3) 10%,
-      rgba(178, 235, 242, 0.3) 10%,
-      rgba(178, 235, 242, 0.3) 20%);
+      rgba(224, 247, 250, 0.2) 0%,
+      rgba(224, 247, 250, 0.2) 10%,
+      rgba(178, 235, 242, 0.2) 10%,
+      rgba(178, 235, 242, 0.2) 20%);
 }
 
 /* GLOBAL STYLES */
@@ -29,10 +28,17 @@ body {
   background-color: var(--color-brand);
   background-image: var(--image-swirl);
   background-attachment: fixed;
+
+  /* STRICTLY FORCE DM SANS FOR EVERYTHING DEFAULT */
+  font-family: var(--font-body);
   color: #0F172A;
 }
 
-/* Only define utilities that Tailwind CANNOT auto-generate */
+/* Utility for the Logo Font Only */
+@utility font-logo {
+  font-family: var(--font-logo);
+}
+
 @utility text-stroke-sm {
-  -webkit-text-stroke: 1px black;
+  -webkit-text-stroke: 1.5px black;
 }
