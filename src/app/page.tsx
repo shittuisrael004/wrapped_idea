@@ -3,8 +3,9 @@
 import { useState } from "react";
 import { useAccount, useConnect, useDisconnect } from "wagmi";
 import { injected } from "wagmi/connectors";
-import SlideIntro from "@/components/slides/SlideIntro";
+import Button3D from "@/components/ui/Button3D";
 import { WrappedSummary } from "@/types/wrapped";
+import SlideIntro from "@/components/slides/SlideIntro";
 
 export default function Home() {
   const { address, isConnected } = useAccount();
@@ -18,85 +19,59 @@ export default function Home() {
     if (!address) return;
     setLoading(true);
     try {
-      // Call our API Engine
       const res = await fetch(`/api/wrapped?address=${address}`);
       const json = await res.json();
-      
-      if (json.error) {
-        alert("Error: " + json.error);
-        return;
-      }
+      if (json.error) { alert(json.error); return; }
       setData(json);
-    } catch (err) {
-      console.error(err);
-      alert("Failed to fetch data.");
-    } finally {
-      setLoading(false);
-    }
+    } catch (err) { console.error(err); } finally { setLoading(false); }
   };
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-4 bg-black text-white">
+    <main className="min-h-screen w-full flex flex-col items-center justify-center p-4 bg-swirl relative overflow-hidden font-body text-slate-900">
       
-      {/* Header / Connect Button */}
-      <div className="absolute top-6 right-6 z-10">
-        {isConnected ? (
-          <button 
-            onClick={() => disconnect()} 
-            className="text-xs font-mono text-zinc-500 hover:text-red-400 transition"
-          >
-            DISCONNECT {address?.slice(0,6)}...
-          </button>
-        ) : (
-          <button 
-            onClick={() => connect({ connector: injected() })}
-            className="px-6 py-2 bg-white text-black font-bold rounded-full hover:scale-105 transition"
-          >
-            Connect Wallet
-          </button>
-        )}
-      </div>
+      {/* 1. Header Title (Retro Font, Outline Effect) */}
+      <h1 className="z-10 font-heading text-4xl md:text-6xl text-white mb-8 text-center uppercase tracking-widest drop-shadow-[4px_4px_0px_rgba(0,0,0,1)] [-webkit-text-stroke:2px_black]">
+        Wrapped On Chain
+      </h1>
 
-      <div className="w-full max-w-md aspect-[9/16] relative">
+      {/* 2. The Main Card (White, Rounded, Hard Shadow) */}
+      <div className="z-10 w-full max-w-md bg-white border-[3px] border-black rounded-[2rem] shadow-hard p-6 md:p-10 relative">
         
-        {/* STATE 1: Not Connected / Start Screen */}
-        {!data && (
-          <div className="flex flex-col items-center justify-center h-full text-center space-y-8 animate-in fade-in zoom-in">
-            <div className="space-y-2">
-              <h1 className="text-6xl font-black tracking-tighter bg-gradient-to-r from-purple-400 to-pink-600 bg-clip-text text-transparent">
-                WALLET<br/>WRAPPED
-              </h1>
-              <p className="text-zinc-500 font-medium">Your 2024 On-Chain Recap</p>
+        {!data ? (
+          /* STATE: Start Screen */
+          <div className="flex flex-col items-center text-center space-y-6">
+            <div>
+              <h2 className="text-2xl font-bold">Check Your 2024</h2>
+              <p className="text-slate-500 font-medium">Connect wallet to see your year.</p>
             </div>
-            
-            {isConnected ? (
-              <button 
-                onClick={fetchWrapped}
-                disabled={loading}
-                className="px-8 py-4 bg-white text-black rounded-full font-bold text-xl hover:bg-zinc-200 transition disabled:opacity-50 flex items-center gap-2"
-              >
-                {loading ? (
-                  <>
-                    <span className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin"></span>
-                    Scanning...
-                  </>
-                ) : (
-                  "Generate Wrapped 🚀"
-                )}
-              </button>
-            ) : (
-              <p className="text-sm text-zinc-600 border border-zinc-800 px-4 py-2 rounded-lg bg-zinc-900/50">
-                Connect your wallet to start
-              </p>
-            )}
+             
+             {isConnected ? (
+               <div className="w-full space-y-3">
+                 <Button3D onClick={fetchWrapped} disabled={loading} variant="brand">
+                   {loading ? "Scanning..." : "Generate Wrapped 🚀"}
+                 </Button3D>
+                 <button onClick={() => disconnect()} className="text-xs font-bold text-slate-400 underline decoration-2 underline-offset-2 hover:text-black">
+                   Disconnect {address?.slice(0,6)}...
+                 </button>
+               </div>
+             ) : (
+               <Button3D onClick={() => connect({ connector: injected() })} variant="black">
+                 Connect Wallet
+               </Button3D>
+             )}
+          </div>
+        ) : (
+          /* STATE: Results */
+          <div>
+            <SlideIntro data={data} />
+            <button 
+              onClick={() => setData(null)} 
+              className="mt-6 w-full text-center text-xs text-slate-400 font-bold hover:text-black uppercase tracking-widest"
+            >
+               Start Over
+            </button>
           </div>
         )}
-
-        {/* STATE 2: Data Loaded (Slides) */}
-        {data && (
-          <SlideIntro data={data} />
-        )}
-
       </div>
     </main>
   );
