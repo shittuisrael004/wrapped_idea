@@ -2,38 +2,46 @@ import { WrappedSummary } from "@/types/wrapped";
 import { FireIcon, BoltIcon } from "@heroicons/react/24/outline";
 
 export default function SlideIntro({ data }: { data: WrappedSummary }) {
-  // Convert string "$0.00" to a number to check if it's real
   const gasValue = parseFloat(data.summary.total_gas_usd);
   const showGas = gasValue > 0;
 
   return (
-    <div className="flex flex-col items-center justify-center h-full space-y-8 text-center p-6 bg-zinc-900 border border-zinc-800 rounded-3xl shadow-2xl animate-in fade-in zoom-in duration-500">
-      <div className="space-y-2">
-        <h2 className="text-3xl font-bold text-white">2024 At A Glance</h2>
-        <p className="text-zinc-400">You were busy this year.</p>
+    <div className="flex flex-col items-center justify-center space-y-8 text-center animate-in fade-in zoom-in duration-500">
+      
+      <div className="space-y-1">
+        <h2 className="font-heading text-3xl text-slate-900 uppercase">2024 At A Glance</h2>
+        <p className="text-slate-500 font-medium">You were busy this year.</p>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 w-full">
-        {/* Transaction Card */}
-        <div className="bg-zinc-800/50 p-6 rounded-2xl border border-zinc-700/50 flex flex-col items-center hover:bg-zinc-800 transition">
-          <BoltIcon className="w-10 h-10 text-yellow-400 mb-2" />
-          <span className="text-5xl font-black text-white tracking-tighter">
+      <div className="w-full space-y-4">
+        {/* Transaction Stat */}
+        <div className="flex items-center justify-between bg-slate-50 border-2 border-slate-100 p-4 rounded-2xl">
+          <div className="flex items-center gap-3">
+             <div className="p-3 bg-[#B1E4E3] rounded-xl border border-slate-900 shadow-[2px_2px_0px_0px_rgba(15,23,42,1)]">
+                <BoltIcon className="w-6 h-6 text-slate-900" />
+             </div>
+             <span className="text-xs font-bold text-slate-400 uppercase tracking-wider text-left">
+               Total<br/>Transactions
+             </span>
+          </div>
+          <span className="font-heading text-4xl text-slate-900">
             {data.summary.total_tx.toLocaleString()}
-          </span>
-          <span className="text-sm font-medium text-zinc-400 uppercase tracking-widest mt-2">
-            Total Transactions
           </span>
         </div>
 
-        {/* Gas Card - Only show if > 0 */}
+        {/* Gas Stat */}
         {showGas && (
-          <div className="bg-zinc-800/50 p-6 rounded-2xl border border-zinc-700/50 flex flex-col items-center hover:bg-zinc-800 transition">
-            <FireIcon className="w-10 h-10 text-orange-500 mb-2" />
-            <span className="text-4xl font-bold text-white">
+          <div className="flex items-center justify-between bg-slate-50 border-2 border-slate-100 p-4 rounded-2xl">
+            <div className="flex items-center gap-3">
+               <div className="p-3 bg-orange-200 rounded-xl border border-slate-900 shadow-[2px_2px_0px_0px_rgba(15,23,42,1)]">
+                  <FireIcon className="w-6 h-6 text-slate-900" />
+               </div>
+               <span className="text-xs font-bold text-slate-400 uppercase tracking-wider text-left">
+                 Gas<br/>Burned
+               </span>
+            </div>
+            <span className="font-heading text-3xl text-slate-900">
               ${data.summary.total_gas_usd}
-            </span>
-            <span className="text-sm font-medium text-zinc-400 uppercase tracking-widest mt-2">
-              Gas Burned
             </span>
           </div>
         )}
