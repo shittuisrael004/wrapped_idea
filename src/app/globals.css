@@ -5,9 +5,12 @@
   --color-brand: #B1E4E3;
   --color-brand-dark: #8BCBC9;
 
-  /* FONTS */
-    --font-family-logo: var(--font-alfa-slab), cursive;
-    --font-family-body: var(--font-dm-sans), sans-serif;
+  /* FONTS (Tailwind v4 automatically generates .font-logo and .font-body from this) */
+  --font-logo: var(--font-alfa-slab), cursive;
+  --font-body: var(--font-dm-sans), sans-serif;
+
+  /* Overwrite the default 'font-sans' to use your body font */
+  --font-sans: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
 
   /* SHADOWS */
   --shadow-hard: 0px 4px 0px 0px #0F172A;
@@ -27,18 +30,13 @@ body {
   background-image: var(--image-swirl);
   background-attachment: fixed;
 
-    font-family: var(--font-family-body);
+  /* Use the generated variable for the default font */
+  font-family: var(--font-body);
 
   color: #0F172A;
 }
 
-.font-logo {
-  font-family: var(--font-alfa-slab), cursive !important;
-}
-.font-body {
-  font-family: var(--font-family-body);
-}
-
+/* CUSTOM UTILITIES */
 @utility text-stroke-sm {
   -webkit-text-stroke: 1px black;
 }

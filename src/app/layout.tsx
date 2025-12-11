@@ -15,7 +15,7 @@ const dmSans = DM_Sans({
 const alfaSlab = Alfa_Slab_One({
   weight: "400",
   subsets: ["latin"],
-  variable: "--font-alfa-slab", // Defines CSS variable '--font-alfa-slab'
+  variable: "--font-alfa-slab", // <--- This MUST match the var() in globals.css
   display: "swap",
 });
 
