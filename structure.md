@@ -18,6 +18,7 @@
 │   │   ├── page.tsx
 │   │   └── providers.tsx
 │   ├── components
+│   │   ├── MintButton.tsx
 │   │   ├── slides
 │   │   │   ├── Carousel.tsx
 │   │   │   └── SlideIntro.tsx
@@ -26,6 +27,9 @@
 │   │       ├── ChainLogo.tsx
 │   │       ├── CryptoBackground.tsx
 │   │       └── Stepper.tsx
+│   ├── contracts
+│   │   ├── wrapped-onchain_base.sol
+│   │   └── wrapped-onchain_celo.sol
 │   ├── lib
 │   │   └── utils.ts
 │   └── types
@@ -33,4 +37,4 @@
 ├── structure.md
 └── tsconfig.json
 
-12 directories, 22 files
+13 directories, 25 files
