@@ -4,28 +4,27 @@
 ├── package.json
 ├── postcss.config.mjs
 ├── public
-│   ├── file.svg
-│   ├── globe.svg
-│   ├── next.svg
-│   ├── vercel.svg
-│   └── window.svg
 ├── push.sh
 ├── README.md
 ├── src
 │   ├── app
 │   │   ├── api
+│   │   │   ├── upload
+│   │   │   │   └── route.ts
 │   │   │   └── wrapped
 │   │   │       └── route.ts
-│   │   ├── favicon.ico
 │   │   ├── globals.css
 │   │   ├── layout.tsx
 │   │   ├── page.tsx
 │   │   └── providers.tsx
 │   ├── components
 │   │   ├── slides
+│   │   │   ├── Carousel.tsx
 │   │   │   └── SlideIntro.tsx
 │   │   └── ui
 │   │       ├── Button3D.tsx
+│   │       ├── ChainLogo.tsx
+│   │       ├── CryptoBackground.tsx
 │   │       └── Stepper.tsx
 │   ├── lib
 │   │   └── utils.ts
@@ -34,4 +33,4 @@
 ├── structure.md
 └── tsconfig.json
 
-11 directories, 24 files
+12 directories, 22 files
