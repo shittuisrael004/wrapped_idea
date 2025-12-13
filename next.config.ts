@@ -2,22 +2,22 @@ import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   webpack: (config) => {
-    // 1. Force Webpack to ignore these modules
-    // 'tap' and 'why-is-node-running' are the specific ones causing your current error
-    config.externals.push(
-      'pino-pretty', 
-      'lokijs', 
-      'encoding', 
-      'tap', 
-      'why-is-node-running'
-    );
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      // Previous ignores
+      'tap': false,
+      'why-is-node-running': false,
+      'pino-pretty': false,
+      '@react-native-async-storage/async-storage': false,
+      '@solana/kit': false,
+    };
 
-    // 2. Polyfill Node.js modules for the browser
     config.resolve.fallback = {
       ...config.resolve.fallback,
       fs: false,
       net: false,
       tls: false,
+      child_process: false,
     };
 
     return config;
