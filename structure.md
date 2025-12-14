@@ -19,14 +19,19 @@
 │   │   └── providers.tsx
 │   ├── components
 │   │   ├── MintButton.tsx
+│   │   ├── modals
+│   │   │   └── ChainSelectModal.tsx
 │   │   ├── slides
 │   │   │   ├── Carousel.tsx
 │   │   │   └── SlideIntro.tsx
-│   │   └── ui
-│   │       ├── Button3D.tsx
-│   │       ├── ChainLogo.tsx
-│   │       ├── CryptoBackground.tsx
-│   │       └── Stepper.tsx
+│   │   ├── ui
+│   │   │   ├── Button3D.tsx
+│   │   │   ├── ChainLogo.tsx
+│   │   │   ├── CryptoBackground.tsx
+│   │   │   └── Stepper.tsx
+│   │   └── WalletStatus.tsx
+│   ├── constants
+│   │   └── contracts.ts
 │   ├── contracts
 │   │   ├── wrapped-onchain_base.sol
 │   │   └── wrapped-onchain_celo.sol
@@ -37,4 +42,4 @@
 ├── structure.md
 └── tsconfig.json
 
-13 directories, 25 files
+15 directories, 28 files

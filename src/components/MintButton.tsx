@@ -1,26 +1,33 @@
-// src/components/MintButton.tsx
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useWriteContract, useWaitForTransactionReceipt, useSwitchChain, useAccount } from 'wagmi';
-import { parseEther } from 'viem';
+import { useState, useEffect } from "react";
+import { 
+  useWriteContract, 
+  useWaitForTransactionReceipt, 
+  useSwitchChain, 
+  useAccount, 
+  useConnect 
+} from "wagmi";
+import { injected } from "wagmi/connectors"; // Needed for the lazy connect
+import { parseEther } from "viem";
 import { SparklesIcon } from "@heroicons/react/24/solid";
-import { WrappedSummary } from '@/types/wrapped';
+import { WrappedSummary } from "@/types/wrapped";
 import Button3D from './ui/Button3D';
 import ChainSelectModal from './modals/ChainSelectModal'; 
 import { PERSONA_CONTRACT_ABI, CHAIN_CONFIG } from '../constants/contracts';
+import confetti from "canvas-confetti"; // For confetti
 
 export default function MintButton({ data }: { data: WrappedSummary }) {
-  // UI State
+  // --- UI STATE ---
   const [isModalOpen, setIsModalOpen] = useState(false);
-  
-  // Logic State
-  const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState('');
+  const [isUploading, setIsUploading] = useState(false);
 
-  // Wagmi Hooks
-  const { chain } = useAccount();
+  // --- WAGMI HOOKS ---
+  const { isConnected, chain } = useAccount();
+  const { connect } = useConnect(); // Added for Lazy Connect
   const { switchChainAsync } = useSwitchChain(); 
+  
   const { 
     data: hash, 
     isPending: isWalletLoading, 
@@ -33,13 +40,34 @@ export default function MintButton({ data }: { data: WrappedSummary }) {
     isSuccess: isConfirmed 
   } = useWaitForTransactionReceipt({ hash });
 
-  // 1. OPEN MODAL
-  const handleOpenModal = () => {
-    setUploadError('');
-    setIsModalOpen(true);
+  // --- EFFECT: Confetti on Success ---
+  useEffect(() => {
+    if (isConfirmed) {
+      confetti({
+        particleCount: 150,
+        spread: 70,
+        origin: { y: 0.6 },
+        colors: ['#B1E4E3', '#000000', '#ffffff']
+      });
+    }
+  }, [isConfirmed]);
+
+  // --- 1. THE "LAZY" CLICK HANDLER ---
+  // This replaces your old handleOpenModal. 
+  // It checks connection FIRST, then opens modal.
+  const handleLazyClick = () => {
+    setUploadError(''); // Clear previous errors
+    
+    if (!isConnected) {
+      // If not connected, trigger wallet popup immediately
+      connect({ connector: injected() });
+    } else {
+      // If connected, proceed to chain selection
+      setIsModalOpen(true);
+    }
   };
 
-  // 2. HANDLE SELECTION & MINT
+  // --- 2. HANDLE SELECTION, UPLOAD & MINT (RESTORED FULL LOGIC) ---
   const handleChainSelect = async (targetChainId: number) => {
     setIsModalOpen(false); 
     setIsUploading(true); 
@@ -54,7 +82,7 @@ export default function MintButton({ data }: { data: WrappedSummary }) {
         }
       }
 
-      // Step B: Upload to IPFS
+      // Step B: Upload to IPFS (RESTORED)
       // We upload AFTER selection so we can tag the metadata with the network name
       const metadataPayload = {
         name: data.persona.title,
@@ -65,7 +93,8 @@ export default function MintButton({ data }: { data: WrappedSummary }) {
           { trait_type: "Top Chain", value: data.favorites.top_chain },
           { trait_type: "Minted Network", value: CHAIN_CONFIG[targetChainId as keyof typeof CHAIN_CONFIG].name } 
         ],
-        image: "ipfs://QmYourDefaultPlaceholderImage" // Replace if you have dynamic images
+        // Ideally, you'd generate the dynamic image here before this step
+        image: "ipfs://QmYourDefaultPlaceholderImage" 
       };
 
       const response = await fetch('/api/upload', {
@@ -119,22 +148,24 @@ export default function MintButton({ data }: { data: WrappedSummary }) {
     );
   }
 
+  // Determine button text based on state
   const buttonText = isUploading ? 'Preparing...' 
                    : isWalletLoading ? 'Check Wallet...' 
                    : isConfirming ? 'Minting...' 
-                   : 'MINT CARD';
+                   : 'MINT CARD'; // "Lazy" text (doesn't say 'Connect')
 
   return (
     <>
       <div className="w-full relative">
+         {/* RESTORED ERROR BANNER */}
          {(uploadError || walletError) && (
-            <div className="absolute -top-16 left-0 right-0 mx-auto w-max max-w-[90%] text-center text-xs font-bold bg-red-100 text-red-600 border-2 border-red-500 p-2 rounded mb-2 z-10">
+            <div className="absolute -top-16 left-0 right-0 mx-auto w-max max-w-[90%] text-center text-xs font-bold bg-red-100 text-red-600 border-2 border-red-500 p-2 rounded mb-2 z-10 animate-in fade-in slide-in-from-bottom-2">
               ⚠️ {uploadError || (walletError as any)?.shortMessage || 'Transaction Failed'}
             </div>
          )}
 
         <Button3D 
-          onClick={handleOpenModal} 
+          onClick={handleLazyClick} 
           disabled={isUploading || isWalletLoading || isConfirming}
           variant="brand"
           className="w-full"

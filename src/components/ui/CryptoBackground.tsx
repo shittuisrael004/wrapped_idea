@@ -7,29 +7,25 @@ import {
   SiLitecoin, SiBinance
 } from "react-icons/si";
 
-// Manually curated positions
+// UPDATED: Large sizes, varied blur for depth, and lower opacity
 const items = [
-  // Top Left Cluster
-  { Icon: SiBitcoin, top: "5%", left: "5%", size: 60, rotate: -15, opacity: 0.1 },
-  { Icon: SiEthereum, top: "15%", left: "15%", size: 40, rotate: 10, opacity: 0.08 },
+  // Top Left - Huge Bitcoin (Background Anchor)
+  { Icon: SiBitcoin, top: "-10%", left: "-10%", size: 400, rotate: -15, opacity: 0.03, blur: "blur-sm" },
   
-  // Top Right Cluster
-  { Icon: SiSolana, top: "8%", right: "5%", size: 55, rotate: 20, opacity: 0.1 },
-  { Icon: SiEthereum, top: "20%", right: "12%", size: 35, rotate: -10, opacity: 0.08 }, // Replaced Uniswap
+  // Bottom Right - Huge Ethereum (Background Anchor)
+  { Icon: SiEthereum, bottom: "-5%", right: "-10%", size: 380, rotate: 10, opacity: 0.03, blur: "blur-sm" },
 
-  // Bottom Left Cluster
-  { Icon: SiDogecoin, bottom: "10%", left: "8%", size: 50, rotate: 15, opacity: 0.1 },
-  { Icon: SiChainlink, bottom: "25%", left: "5%", size: 30, rotate: -5, opacity: 0.07 },
-
-  // Bottom Right Cluster
-  { Icon: SiPolkadot, bottom: "5%", right: "8%", size: 60, rotate: -20, opacity: 0.1 },
-  { Icon: SiCardano, bottom: "20%", right: "15%", size: 40, rotate: 10, opacity: 0.08 },
-
-  // Mid-Floating (Subtle)
-  { Icon: SiTether, top: "45%", left: "8%", size: 25, rotate: 45, opacity: 0.05 },
-  { Icon: SiBinance, top: "50%", right: "5%", size: 25, rotate: -30, opacity: 0.05 },
-  { Icon: SiLitecoin, bottom: "40%", right: "10%", size: 30, rotate: 15, opacity: 0.06 },
-  { Icon: SiXrp, top: "10%", left: "40%", size: 20, rotate: 60, opacity: 0.04 },
+  // Mid-Floating - Medium Elements (Sharper, "Closer")
+  { Icon: SiSolana, top: "20%", right: "15%", size: 180, rotate: 20, opacity: 0.05, blur: "blur-none" },
+  { Icon: SiDogecoin, bottom: "15%", left: "10%", size: 160, rotate: -15, opacity: 0.05, blur: "blur-none" },
+  
+  // Deep Background - Small/Blurry (Far away)
+  { Icon: SiPolkadot, top: "40%", left: "20%", size: 120, rotate: 45, opacity: 0.02, blur: "blur-md" },
+  { Icon: SiCardano, bottom: "40%", right: "20%", size: 100, rotate: -10, opacity: 0.02, blur: "blur-md" },
+  
+  // Edges - Floating fragments
+  { Icon: SiChainlink, top: "10%", left: "40%", size: 80, rotate: 30, opacity: 0.04, blur: "blur-[2px]" },
+  { Icon: SiBinance, bottom: "10%", right: "40%", size: 90, rotate: -20, opacity: 0.04, blur: "blur-[2px]" },
 ];
 
 export default function CryptoBackground() {
@@ -44,19 +40,16 @@ export default function CryptoBackground() {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
       {items.map((item, i) => {
-        const { Icon, size, rotate, opacity, top, left, right, bottom } = item;
+        const { Icon, size, rotate, opacity, blur, top, left, right, bottom } = item;
         
         return (
           <div
             key={i}
-            className="absolute text-slate-900 mix-blend-overlay transition-all duration-1000 ease-in-out hover:scale-110"
+            // Added ${blur} to class list for depth of field effect
+            className={`absolute text-slate-900 mix-blend-overlay transition-transform duration-[3000ms] ease-in-out hover:scale-110 ${blur}`}
             style={{
-              // We explicitly set CSS properties here to fix the TypeScript error
-              top: top,
-              left: left,
-              right: right,
-              bottom: bottom,
-              opacity: opacity,
+              top, left, right, bottom,
+              opacity,
               fontSize: `${size}px`,
               transform: `rotate(${rotate}deg)`,
             }}
