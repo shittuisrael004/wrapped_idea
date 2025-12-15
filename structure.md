@@ -4,6 +4,7 @@
 ├── package.json
 ├── postcss.config.mjs
 ├── public
+│   └── WrappedOnchain.png
 ├── push.sh
 ├── README.md
 ├── src
@@ -42,4 +43,4 @@
 ├── structure.md
 └── tsconfig.json
 
-15 directories, 28 files
+15 directories, 29 files
