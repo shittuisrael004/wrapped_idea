@@ -8,10 +8,9 @@ import { WagmiAdapter } from '@reown/appkit-adapter-wagmi'
 import { base, celo } from "@reown/appkit/networks"; // Import networks from Reown
 import { ReactNode } from "react";
 
-// 1. Get projectId from https://cloud.reown.com
+
 export const projectId = process.env.NEXT_PUBLIC_PROJECT_ID || "YOUR_PROJECT_ID_HERE";
 
-// 2. Create the Adapter
 export const networks = [base, celo];
 
 export const wagmiAdapter = new WagmiAdapter({
@@ -28,7 +27,7 @@ const metadata = {
   icons: ['https://wrapped-onchain.vercel.app/favicon.ico'],
 }
 
-// 4. Create the Modal
+
 createAppKit({
   adapters: [wagmiAdapter],
   networks: [base, celo],
