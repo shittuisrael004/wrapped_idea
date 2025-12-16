@@ -1,7 +1,7 @@
-import { WrappedSummary } from "@/types/wrapped";
+import { WrappedData } from "@/types/wrapped";
 import { FireIcon, BoltIcon } from "@heroicons/react/24/outline";
 
-export default function SlideIntro({ data }: { data: WrappedSummary }) {
+export default function SlideIntro({ data }: { data: WrappedData }) {
   const gasValue = parseFloat(data.summary.total_gas_usd);
   const showGas = gasValue > 0;
 

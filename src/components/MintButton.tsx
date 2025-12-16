@@ -11,13 +11,13 @@ import {
 import { injected } from "wagmi/connectors"; // Needed for the lazy connect
 import { parseEther } from "viem";
 import { SparklesIcon } from "@heroicons/react/24/solid";
-import { WrappedSummary } from "@/types/wrapped";
+import { WrappedData } from "@/types/wrapped";
 import Button3D from './ui/Button3D';
 import ChainSelectModal from './modals/ChainSelectModal'; 
 import { PERSONA_CONTRACT_ABI, CHAIN_CONFIG } from '../constants/contracts';
 import confetti from "canvas-confetti"; 
 
-export default function MintButton({ data }: { data: WrappedSummary }) {
+export default function MintButton({ data }: { data: WrappedData }) {
   // --- UI STATE ---
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [uploadError, setUploadError] = useState('');
