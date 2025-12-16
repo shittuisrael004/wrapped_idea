@@ -17,7 +17,6 @@ import {
   FingerPrintIcon
 } from "@heroicons/react/24/solid";
 
-// --- ANIMATION VARIANTS ---
 const slideVariants: Variants = {
   enter: (direction: number) => ({
     x: direction > 0 ? 100 : -100,
@@ -54,14 +53,12 @@ function Counter({ value, prefix = "" }: { value: number | string, prefix?: stri
   );
 }
 
-// Add 'onReveal' prop to signal the parent page
 export default function StoryCarousel({ data, onReveal }: { data: WrappedData, onReveal: (isRevealed: boolean) => void }) {
   const [index, setIndex] = useState(0);
   const [direction, setDirection] = useState(0);
 
   const TOTAL_SLIDES = 12;
 
-  // Signal the parent when we hit the reveal slide (Index 11)
   useEffect(() => {
     onReveal(index === 11);
   }, [index, onReveal]);
@@ -80,9 +77,14 @@ export default function StoryCarousel({ data, onReveal }: { data: WrappedData, o
     }
   };
 
+  const getBackgroundClass = () => {
+    if (index === 11) return "bg-transparent"; // Make carousel transparent for final reveal
+    if (index > 7) return "bg-slate-50"; 
+    return "bg-white"; 
+  };
+
   const renderContent = () => {
     switch (index) {
-      // --- SLIDE 0: THE SCAN (Upgraded) ---
       case 0:
         return (
           <div className="text-center space-y-8 max-w-md mx-auto">
@@ -93,7 +95,6 @@ export default function StoryCarousel({ data, onReveal }: { data: WrappedData, o
                 className="absolute inset-0 bg-[#B1E4E3]/20 rounded-full blur-xl"
               />
               <FingerPrintIcon className="w-24 h-24 text-slate-900 relative z-10" />
-              {/* Scan Line */}
               <motion.div 
                 initial={{ top: "0%" }}
                 animate={{ top: "100%" }}
@@ -101,7 +102,6 @@ export default function StoryCarousel({ data, onReveal }: { data: WrappedData, o
                 className="absolute left-0 w-full h-1 bg-[#B1E4E3] shadow-[0_0_10px_#B1E4E3] z-20 opacity-80"
               />
             </div>
-            
             <div className="space-y-2">
               <motion.h1 
                 initial={{ opacity: 0, y: 10 }}
@@ -117,14 +117,14 @@ export default function StoryCarousel({ data, onReveal }: { data: WrappedData, o
           </div>
         );
       
-      // --- SLIDE 1: HOME BASE ---
+      // ... (Slides 1-10 remain standard)
       case 1:
         return (
           <div className="text-center space-y-8">
             <GlobeAmericasIcon className="w-24 h-24 text-[#B1E4E3] mx-auto drop-shadow-md" />
             <div>
               <p className="text-xs font-black uppercase tracking-[0.2em] text-slate-400 mb-4">Primary Jurisdiction</p>
-              <h2 className="text-6xl md:text-7xl font-black text-slate-900 uppercase tracking-tighter">
+              <h2 className="text-5xl md:text-7xl font-black text-slate-900 uppercase tracking-tighter">
                 {data.favorites.top_chain}
               </h2>
             </div>
@@ -138,7 +138,7 @@ export default function StoryCarousel({ data, onReveal }: { data: WrappedData, o
         return (
           <div className="text-center space-y-6">
             <p className="text-xs font-black uppercase tracking-[0.2em] text-slate-400">Total Interactions</p>
-            <div className="text-[6rem] md:text-[8rem] leading-none font-logo text-slate-900">
+            <div className="text-[5rem] md:text-[8rem] leading-none font-logo text-slate-900">
               <Counter value={data.summary.total_tx} />
             </div>
             <p className="text-lg text-slate-500 font-medium max-w-xs mx-auto">
@@ -152,7 +152,7 @@ export default function StoryCarousel({ data, onReveal }: { data: WrappedData, o
           <div className="text-center space-y-8">
             <FireIcon className="w-24 h-24 text-orange-500 mx-auto animate-bounce" />
             <div>
-              <h2 className="text-6xl font-black text-slate-900">
+              <h2 className="text-5xl md:text-6xl font-black text-slate-900">
                 <Counter value={data.summary.total_gas_usd} prefix="$" />
               </h2>
               <p className="text-xs font-black uppercase tracking-[0.2em] text-slate-400 mt-2">Burnt in Gas</p>
@@ -176,7 +176,7 @@ export default function StoryCarousel({ data, onReveal }: { data: WrappedData, o
         return (
           <div className="text-center space-y-8">
             <div className="text-xs font-black uppercase tracking-[0.2em] text-slate-400">Peak Performance</div>
-            <h2 className="text-6xl font-logo text-[#B1E4E3] text-stroke-sm uppercase drop-shadow-sm">
+            <h2 className="text-5xl md:text-6xl font-logo text-[#B1E4E3] text-stroke-sm uppercase drop-shadow-sm">
               {data.summary.peak_month}
             </h2>
             <p className="text-slate-600 font-medium">
@@ -203,7 +203,7 @@ export default function StoryCarousel({ data, onReveal }: { data: WrappedData, o
         return (
           <div className="text-center space-y-8">
             <StarIcon className="w-24 h-24 text-slate-300 mx-auto animate-spin-slow" />
-            <h2 className="text-4xl font-black text-slate-900">CALCULATING RARITY...</h2>
+            <h2 className="text-3xl md:text-4xl font-black text-slate-900">CALCULATING RARITY...</h2>
           </div>
         );
 
@@ -211,7 +211,7 @@ export default function StoryCarousel({ data, onReveal }: { data: WrappedData, o
         return (
           <div className="text-center space-y-8">
             <p className="text-xs font-black uppercase tracking-[0.2em] text-slate-400">Trait Acquired</p>
-            <div className="inline-block px-8 py-4 bg-black text-white text-2xl font-bold uppercase rounded-xl shadow-[8px_8px_0px_#B1E4E3] transform -rotate-2">
+            <div className="inline-block px-8 py-4 bg-black text-white text-xl md:text-2xl font-bold uppercase rounded-xl shadow-[8px_8px_0px_#B1E4E3] transform -rotate-2">
               #{data.traits[0] || "Normie"}
             </div>
           </div>
@@ -221,7 +221,7 @@ export default function StoryCarousel({ data, onReveal }: { data: WrappedData, o
         return (
           <div className="text-center space-y-8">
              <p className="text-xs font-black uppercase tracking-[0.2em] text-slate-400">Trait Acquired</p>
-            <div className="inline-block px-8 py-4 bg-white border-4 border-black text-black text-2xl font-bold uppercase rounded-xl shadow-[8px_8px_0px_#000] transform rotate-3">
+            <div className="inline-block px-8 py-4 bg-white border-4 border-black text-black text-xl md:text-2xl font-bold uppercase rounded-xl shadow-[8px_8px_0px_#000] transform rotate-3">
               #{data.traits[1] || "NPC"}
             </div>
           </div>
@@ -243,7 +243,7 @@ export default function StoryCarousel({ data, onReveal }: { data: WrappedData, o
           </div>
         );
 
-      // --- THE REVEAL (Render Nothing Here, handled by Parent) ---
+      // --- SLIDE 11: THE REVEAL (Floating on top) ---
       case 11:
         return (
           <div className="w-full flex flex-col items-center">
@@ -258,10 +258,10 @@ export default function StoryCarousel({ data, onReveal }: { data: WrappedData, o
     }
   };
 
-return (
+  return (
     <div className={`w-full h-full flex flex-col justify-between p-4 relative overflow-hidden transition-colors duration-700 ${getBackgroundClass()}`}>
       
-      {/* 1. PROGRESS PIPS (Fixed Position) */}
+      {/* 1. PROGRESS PIPS */}
       <div className={`relative z-20 flex gap-1.5 mb-4 ${index === 11 ? "opacity-0" : "opacity-100"} transition-opacity duration-500`}>
         {Array.from({ length: TOTAL_SLIDES }).map((_, i) => (
           <div 
@@ -273,8 +273,8 @@ return (
         ))}
       </div>
 
-      {/* 2. THE STAGE (Added padding and z-index management) */}
-      <div className="flex-grow flex items-center justify-center relative w-full">
+      {/* 2. THE STAGE (Added pt-12 to push content down from progress bar) */}
+      <div className="flex-grow flex items-center justify-center relative w-full pt-12">
         <AnimatePresence custom={direction} mode="wait">
           <motion.div
             key={index}
@@ -283,7 +283,6 @@ return (
             initial="enter"
             animate="center"
             exit="exit"
-            // ADDED: z-10 to sit below buttons, w-full, and px-4 for safety
             className="w-full absolute flex flex-col items-center px-4 z-10"
           >
             {renderContent()}
@@ -291,13 +290,12 @@ return (
         </AnimatePresence>
       </div>
 
-      {/* 3. THE CONTROLS (Fixed Z-Index so buttons always work) */}
+      {/* 3. THE CONTROLS (Z-Index 30 + bg-white/80) */}
       <div className={`relative z-30 w-full max-w-md mx-auto px-2 pb-2 flex items-center justify-between gap-4 ${index === 11 ? "hidden" : "flex"}`}>
         
         <button 
           onClick={prevSlide}
           disabled={index === 0}
-          // ADDED: bg-white to ensure it's visible if content slides under
           className={`w-12 h-12 rounded-full border-2 border-slate-200 bg-white/80 backdrop-blur-sm flex items-center justify-center hover:bg-slate-100 transition-all active:scale-95 disabled:opacity-0 disabled:pointer-events-none shadow-sm`}
         >
           <ArrowLeftIcon className="w-5 h-5 text-slate-400" />
@@ -314,7 +312,7 @@ return (
 
       </div>
 
-      {/* MINT BUTTON (Z-Index 30) */}
+      {/* MINT BUTTON FOR REVEAL */}
       {index === 11 && (
         <motion.div 
           initial={{ y: 50, opacity: 0 }}

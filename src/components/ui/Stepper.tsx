@@ -17,7 +17,7 @@ export default function Stepper({ step }: { step: number }) {
         return (
           <div key={s.num} className="flex items-center">
             <div className={cn(
-              "flex items-center gap-2 px-4 py-2 rounded-full border-2 transition-all duration-300",
+              "flex items-center gap-2 px-3 py-2 md:px-4 md:py-2 rounded-full border-2 transition-all duration-300",
               isActive 
                 ? "bg-white border-black text-black shadow-[2px_2px_0px_0px_#000] translate-y-[-2px]" 
                 : "bg-white/40 border-slate-300 text-slate-400"
@@ -34,9 +34,9 @@ export default function Stepper({ step }: { step: number }) {
                 )}
               </div>
               
-              {/* Label */}
+              {/* Label - FORCE HIDDEN ON MOBILE (hidden md:inline) */}
               <span className={cn(
-                "text-[10px] md:text-xs font-bold font-logo tracking-wider",
+                "hidden md:inline text-xs font-bold font-logo tracking-wider",
                 isActive ? "text-black" : "text-slate-400"
               )}>
                 {s.label}
@@ -46,7 +46,7 @@ export default function Stepper({ step }: { step: number }) {
             {/* Connector Line */}
             {i < steps.length - 1 && (
                <div className={cn(
-                 "w-4 h-[2px] mx-1 md:mx-2 transition-colors duration-300",
+                 "w-4 md:w-8 h-[2px] mx-1 md:mx-2 transition-colors duration-300",
                  step > s.num ? "bg-black" : "bg-slate-300/50"
                )} />
             )}

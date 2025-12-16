@@ -26,11 +26,22 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [manualAddress, setManualAddress] = useState(""); 
   const [data, setData] = useState<WrappedData | null>(null);
-  
-  // NEW STATE: Tracks if we are in the "Grand Reveal" moment
   const [isRevealed, setIsRevealed] = useState(false);
+  
+  // SCANNING TEXT STATE
+  const [scanText, setScanText] = useState("GENERATE WRAPPED");
 
   const currentStep = data ? 3 : isConnected ? 2 : 1;
+
+  // FIX: SLOWER CYCLE (1200ms instead of 500ms)
+  const cycleScanText = () => {
+    const phases = ["SCANNING ETHEREUM...", "SCANNING BASE...", "SCANNING OPTIMISM...", "SCANNING ARBITRUM...", "CALCULATING GAS...", "ANALYZING TRAITS..."];
+    let i = 0;
+    return setInterval(() => {
+      setScanText(phases[i]);
+      i = (i + 1) % phases.length;
+    }, 1200); 
+  };
 
   const fetchWrapped = async (targetAddress?: string) => {
     const activeAddress = targetAddress || address;
@@ -38,13 +49,20 @@ export default function Home() {
     if (!activeAddress.startsWith("0x")) { alert("Please enter a valid 0x address"); return; }
 
     setLoading(true);
+    const interval = cycleScanText(); 
+
     try {
       const res = await fetch(`/api/wrapped?address=${activeAddress}`);
       const json = await res.json();
       if (json.error) { alert(json.error); return; }
       setData(json);
-      setIsRevealed(false); // Reset reveal state
-    } catch (err) { console.error(err); } finally { setLoading(false); }
+      setIsRevealed(false);
+    } catch (err) { console.error(err); } 
+    finally { 
+      setLoading(false); 
+      clearInterval(interval); 
+      setScanText("GENERATE WRAPPED"); 
+    }
   };
 
   return (
@@ -52,12 +70,11 @@ export default function Home() {
       
       {/* 1. BACKGROUND */}
       <CryptoBackground />
-      {/* Add a Dark Overlay that fades in during Reveal */}
       <div className={`fixed inset-0 bg-slate-950 transition-opacity duration-1000 pointer-events-none z-0 ${isRevealed ? 'opacity-95' : 'opacity-0'}`} />
 
       {/* 2. HEADER */}
       <header className={`fixed top-0 left-0 w-full flex justify-center z-50 pt-4 pb-6 transition-all duration-500 ${isRevealed ? 'opacity-0 -translate-y-20' : 'opacity-100'}`}>
-        <h1 className="font-logo text-2xl md:text-5xl text-center leading-[0.85] uppercase drop-shadow-md flex flex-col items-center">
+        <h1 className="font-logo text-2xl md:text-5xl text-center leading-[0.85] uppercase drop-shadow-md pointer-events-auto flex flex-col items-center">
           <span className="text-white text-stroke-sm tracking-wide block">WRAPPED</span>
           <span className="text-[#B1E4E3] text-stroke-sm tracking-wide block">ONCHAIN</span>
         </h1>
@@ -77,20 +94,17 @@ export default function Home() {
       {/* 3. MAIN CONTENT */}
       <div className="flex-grow flex flex-col items-center justify-center w-full px-4 pt-10 pb-12 z-10">
         
-        {/* STEPPER (Hides during reveal) */}
+        {/* STEPPER */}
         <div className={`mb-10 scale-90 md:scale-100 transition-opacity duration-500 ${isRevealed ? 'opacity-0' : 'opacity-100'}`}>
            <Stepper step={currentStep} />
         </div>
 
-        {/* CONTAINER MORPH LOGIC */}
-        {/* If NOT Revealed: It's a White Card with shadow and overflow-hidden.
-            If Revealed: It becomes transparent, overflow-visible, and full screen width to let the card pop out.
-        */}
+        {/* CONTAINER MORPH LOGIC - THIS FIXES THE "ENCASED" NFT */}
         <div className={`
-          z-10 w-full transition-all duration-700 ease-in-out
+          z-10 w-full transition-all duration-700 ease-in-out relative
           ${!data ? 'max-w-lg bg-white rounded-[3rem] shadow-[var(--shadow-deep)]' : ''}
           ${data && !isRevealed ? 'max-w-lg bg-white rounded-[3rem] shadow-[var(--shadow-deep)] min-h-[600px] overflow-hidden' : ''}
-          ${isRevealed ? 'max-w-4xl bg-transparent min-h-[600px] overflow-visible scale-100' : ''}
+          ${isRevealed ? 'max-w-full bg-transparent min-h-[600px] overflow-visible scale-100 shadow-none' : ''} 
         `}>
           
           <div className="relative z-10 h-full">
@@ -100,7 +114,6 @@ export default function Home() {
               <div className="p-8 md:p-12 flex flex-col justify-center items-center text-center space-y-8 min-h-[500px] relative overflow-hidden">
                 <div className="absolute inset-0 magicpattern opacity-50 pointer-events-none" />
                 
-                {/* Input Content... (Keep existing code) */}
                 <div className="space-y-3 z-10">
                   <h2 className="text-3xl md:text-4xl font-logo text-slate-900 leading-tight uppercase">
                     CHECK YOUR 2025<br/><span className="text-[#B1E4E3]">ONCHAIN ACTIVITY</span>
@@ -111,7 +124,15 @@ export default function Home() {
                  {isConnected ? (
                    <div className="w-full max-w-xs space-y-4 flex flex-col items-center z-10">
                      <Button3D onClick={() => fetchWrapped()} disabled={loading} variant="brand">
-                       {loading ? <span className="flex gap-2"><ArrowPathIcon className="w-5 h-5 animate-spin" /> SCANNING...</span> : <span className="flex gap-2"><SparklesIcon className="w-5 h-5" /> GENERATE WRAPPED</span>}
+                       {loading ? (
+                         <span className="flex items-center gap-2 justify-center text-[10px] md:text-xs font-bold uppercase">
+                           <ArrowPathIcon className="w-4 h-4 animate-spin" /> {scanText}
+                         </span>
+                       ) : (
+                         <span className="flex items-center gap-2 justify-center">
+                           <SparklesIcon className="w-5 h-5" /> GENERATE WRAPPED
+                         </span>
+                       )}
                      </Button3D>
                      <button onClick={() => disconnect()} className="w-full text-xs font-bold text-slate-400 hover:text-red-500 mt-4">Disconnect</button>
                    </div>
@@ -130,7 +151,6 @@ export default function Home() {
               </div>
             ) : (
               /* --- STORY MODE --- */
-              /* The magicpattern is now inside the carousel container so it persists across slides */
               <div className="h-full relative">
                  {/* Only show paper texture if NOT revealed */}
                  {!isRevealed && <div className="absolute inset-0 magicpattern opacity-30 pointer-events-none z-0" />}
