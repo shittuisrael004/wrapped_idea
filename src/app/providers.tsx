@@ -1,28 +1,26 @@
 "use client";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { WagmiProvider, cookieToInitialState, type State } from "wagmi";
+import { WagmiProvider, type State } from "wagmi";
 import { createAppKit } from '@reown/appkit/react'
 import { WagmiAdapter } from '@reown/appkit-adapter-wagmi'
 import { base, celo } from "@reown/appkit/networks";
-import { ReactNode, useEffect, useState } from "react";
-
-// --- NEW IMPORTS ---
-import { farcasterFrame } from "@farcaster/frame-wagmi-connector";
+import { ReactNode, useEffect } from "react";
 import sdk from "@farcaster/frame-sdk";
+
+// --- CHANGED: IMPORT FROM LOCAL FILE ---
+import { frameConnector } from "@/lib/connector"; 
 
 export const projectId = process.env.NEXT_PUBLIC_PROJECT_ID || "YOUR_PROJECT_ID_HERE";
 
 export const networks = [base, celo];
 
-// --- MODIFIED ADAPTER ---
-// We inject the farcasterFrame connector here.
 export const wagmiAdapter = new WagmiAdapter({
   networks,
   projectId,
   ssr: true,
   connectors: [
-    farcasterFrame() 
+    frameConnector()
   ]
 });
 
@@ -45,11 +43,9 @@ createAppKit({
 
 const queryClient = new QueryClient();
 
-// --- NEW COMPONENT: Initialize Farcaster SDK ---
 function FarcasterInit() {
   useEffect(() => {
     const load = async () => {
-      // This tells the Farcaster client "We are loaded, stop the spinner"
       sdk.actions.ready();
     };
     if (sdk && sdk.actions) {
@@ -64,7 +60,7 @@ export function Providers({ children, initialState }: { children: ReactNode, ini
   return (
     <WagmiProvider config={wagmiAdapter.wagmiConfig} initialState={initialState}>
       <QueryClientProvider client={queryClient}>
-        <FarcasterInit /> 
+        <FarcasterInit />
         {children}
       </QueryClientProvider>
     </WagmiProvider>

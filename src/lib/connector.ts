@@ -13,10 +13,14 @@ export function frameConnector() {
     type: frameConnector.type,
 
     async setup() {
-      this.connect({ chainId: config.chains[0].id });
+      try {
+        await this.connect({ chainId: config.chains[0].id });
+      } catch (err) {
+        console.warn("Farcaster connector setup failed:", err);
+      }
     },
 
-    async connect({ chainId } = {}) {
+    async connect({ chainId }: { chainId?: number } = {}) {
       const provider = sdk.wallet.ethProvider;
       if (!provider) {
         throw new Error("Farcaster Frame SDK not ready");
@@ -37,7 +41,7 @@ export function frameConnector() {
       return {
         accounts: accounts.map((x) => getAddress(x)),
         chainId: currentChainId,
-      };
+      } as any;
     },
 
     async disconnect() {
@@ -59,11 +63,15 @@ export function frameConnector() {
       return fromHex(hexChainId, "number");
     },
 
+    async getProvider() {
+      return sdk.wallet.ethProvider;
+    },
+
     async isAuthorized() {
       return !!sdk.wallet.ethProvider;
     },
 
-    async switchChain({ chainId }) {
+    async switchChain({ chainId }: { chainId: number }) {
       const provider = sdk.wallet.ethProvider;
       const chain = config.chains.find((x) => x.id === chainId);
       if (!chain) throw new SwitchChainError(new ChainNotConfiguredError());
